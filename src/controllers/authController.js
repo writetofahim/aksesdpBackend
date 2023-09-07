@@ -1,15 +1,13 @@
 const User = require("../models/User");
+const bcrypt = require("bcrypt");
 
 const register = async (req, res) => {
   try {
+    // Retrieve the bcrypt salt from .env file
+    const bcryptSalt = Number(process.env.BCRYPT_SALT);
     console.log(req.body);
     const { fullName, username, email, password } = req.body;
-    const newUser = new User({
-      fullName,
-      username,
-      email,
-      password,
-    });
+
     const existingUser = await User.findOne({ username });
     // console.log(existingUser);
     if (existingUser) {
@@ -17,6 +15,15 @@ const register = async (req, res) => {
         .status(400)
         .json({ success: false, message: "This user is already exists" });
     }
+
+    const hashedPassword = await bcrypt.hash(password, bcryptSalt);
+
+    const newUser = new User({
+      fullName,
+      username,
+      email,
+      password: hashedPassword,
+    });
     await newUser.save();
     console.log("New User added");
     res.status(201).json({
@@ -42,7 +49,7 @@ const login = async (req, res) => {
         message: "The user is not found",
       });
     }
-    const passwordMatch = user.password === password;
+    const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
       return res.status(401).json({
         success: false,
@@ -52,7 +59,7 @@ const login = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      user,
+      user: user.fullName,
       message: "Login successfully",
     });
   } catch (error) {
