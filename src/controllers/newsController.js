@@ -9,7 +9,7 @@ const postNews = async (req, res) => {
     });
     await newNews.save();
     // console.log("New News added");
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       newNews,
     });

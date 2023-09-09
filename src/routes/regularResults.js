@@ -1,24 +1,11 @@
-// const express = require("express");
-// const router = express.Router();
-// const boardResultsController = require("../controllers/boardResultsController");
-// const regularResultsController = require("../controllers/regularResults");
-
-// router.post("/board", boardResultsController.postBoardResults);
-// router.get("/board/:page", boardResultsController.getBoardResults);
-// router.post("/regular", regularResultsController.postRegularResults);
-// router.get("/regular/:page", regularResultsController.getRegularResults);
-
-// module.exports = router;
-
 const express = require("express");
 const multer = require("multer");
-const BoardResults = require("../models/BoardResults");
 const RegularResult = require("../models/RegularResult");
 
 const router = express.Router();
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/boardResults");
+    cb(null, "uploads/regularResults");
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + "-" + file.originalname);
@@ -28,20 +15,20 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Handle file upload
-router.post("/board", upload.single("pdf"), async (req, res) => {
+router.post("/regular", upload.single("pdf"), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    const boardResults = new BoardResults({
+    const regularResults = new RegularResult({
       pdfTitle: req.body.pdfTitle,
-      pdfLink: req.body.pdfLink,
+      //   pdfLink: req.body.pdfLink,
       filename: req.file.filename,
       path: req.file.path,
     });
 
-    await boardResults.save();
+    await regularResults.save();
 
     res.status(201).json({ message: "New Results added successfully" });
   } catch (error) {
@@ -51,10 +38,10 @@ router.post("/board", upload.single("pdf"), async (req, res) => {
 });
 
 // Get all results
-router.get("/board", async (req, res) => {
+router.get("/regular", async (req, res) => {
   try {
-    const boardResults = await BoardResults.find();
-    res.json(boardResults);
+    const regularResults = await RegularResult.find();
+    res.json(regularResults);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });

@@ -1,18 +1,18 @@
-const BoardResults = require("../models/BoardResults");
+const RegularResults = require("../models/RegularResults");
 
-const postBoardResults = async (req, res) => {
+const postRegularResults = async (req, res) => {
   const { pdfTitle, updatedUrl } = req.body;
   const pdfLink = updatedUrl;
   try {
-    const newBoardResults = new BoardResults({
+    const newRegularResults = new RegularResults({
       pdfTitle,
       pdfLink,
     });
-    await newBoardResults.save();
+    await newRegularResults.save();
 
     return res.status(201).json({
       success: true,
-      newBoardResults,
+      newRegularResults,
     });
   } catch (error) {
     return res.status(500).json({
@@ -22,14 +22,14 @@ const postBoardResults = async (req, res) => {
   }
 };
 
-const getBoardResults = async (req, res) => {
+const getRegularResults = async (req, res) => {
   const page = parseInt(req.params.page) || 1; // Get the page number from the request parameter
   const perPage = 5; // Number of documents to retrieve per page
 
   try {
-    const numberOfDocuments = await BoardResults.countDocuments();
+    const numberOfDocuments = await RegularResults.countDocuments();
     const numberOfPages = Math.ceil(numberOfDocuments / perPage);
-    const documents = await BoardResults.find()
+    const documents = await RegularResults.find()
       .sort({ _id: -1 }) // Sort by descending _id (assuming _id is a timestamp)
       .skip((page - 1) * perPage) // Calculate the skip value based on the page number
       .limit(perPage);
@@ -47,6 +47,6 @@ const getBoardResults = async (req, res) => {
 };
 
 module.exports = {
-  postBoardResults,
-  getBoardResults,
+  postRegularResults,
+  getRegularResults,
 };

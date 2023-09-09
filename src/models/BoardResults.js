@@ -5,10 +5,8 @@ const boardResultsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  pdfLink: {
-    type: String,
-    required: true,
-  },
+  filename: String,
+  path: String,
 });
 
 const BoardResults = mongoose.model("BoardResults", boardResultsSchema);

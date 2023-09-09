@@ -43,6 +43,8 @@ const getNoticeTitle = async (req, res) => {
   const perPage = 5; // Number of documents to retrieve per page
 
   try {
+    const numberOfDocuments = await Notice.countDocuments();
+    const numberOfPages = Math.ceil(numberOfDocuments / perPage);
     const documents = await Notice.find()
       .sort({ _id: -1 }) // Sort by descending _id (assuming _id is a timestamp)
       .skip((page - 1) * perPage) // Calculate the skip value based on the page number
@@ -53,7 +55,7 @@ const getNoticeTitle = async (req, res) => {
     }
 
     // Send an array of HTML documents
-    res.status(200).json(documents);
+    res.status(200).json({ pages: numberOfPages, documents });
   } catch (error) {
     console.error("Error retrieving HTML documents:", error);
     res.status(500).json({ error: "Failed to retrieve documents" });
