@@ -10,6 +10,7 @@ const regularResults = require("./src/routes/regularResults");
 const teacherRoutes = require("./src/routes/teacherRoutes");
 const memberRoutes = require("./src/routes/memberRoutes");
 const staffRoutes = require("./src/routes/staffRoutes");
+const events = require("./src/routes/events");
 
 app.use(cors());
 app.use(express.json());
@@ -25,6 +26,7 @@ app.use("/api/results/", regularResults);
 app.use("/api/teachers", teacherRoutes);
 app.use("/api/members", memberRoutes);
 app.use("/api/staffs", staffRoutes);
+app.use("/api/events", events);
 
 // if home or root route
 app.get("/", (req, res) => {
