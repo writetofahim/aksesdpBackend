@@ -15,9 +15,9 @@ const documentsRoutes = require("./src/routes/documentsRoutes");
 
 // Allow requests from specific origins
 const corsOptions = {
-  origin: "*", // Replace with your allowed origin
+  origin: "*", // allowed all origin
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true, // Allow cookies, if applicable
+  credentials: true, // Allow cookies,
 };
 
 app.use(cors(corsOptions));
