@@ -13,7 +13,16 @@ const staffRoutes = require("./src/routes/staffRoutes");
 const events = require("./src/routes/events");
 const documentsRoutes = require("./src/routes/documentsRoutes");
 
-app.use(cors());
+// Allow requests from specific origins
+const corsOptions = {
+  origin: "*", // Replace with your allowed origin
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true, // Allow cookies, if applicable
+};
+
+app.use(cors(corsOptions));
+
+// app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
@@ -32,12 +41,15 @@ app.use("/api/documents", documentsRoutes);
 
 // if home or root route
 app.get("/", (req, res) => {
-  res.send("<h1>this is home route 12</h1>");
+  return res.status(200).json({
+    success: true,
+    message: "Your are at home!",
+  });
 });
 
 // if unknown route
 app.use((req, res) => {
-  res.send("<h1>404 not found</h1>");
+  return res.status(404).json({ success: false, message: "No route found" });
 });
 
 module.exports = app;

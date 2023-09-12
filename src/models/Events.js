@@ -5,6 +5,9 @@ const eventsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  subTitle: {
+    type: String,
+  },
   filename: String,
   path: String,
 });

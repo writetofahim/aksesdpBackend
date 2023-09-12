@@ -3,9 +3,9 @@ const bcrypt = require("bcrypt");
 
 const register = async (req, res) => {
   try {
+    // console.log(req.body);
     // Retrieve the bcrypt salt from .env file
     const bcryptSalt = Number(process.env.BCRYPT_SALT);
-    console.log(req.body);
     const { fullName, username, email, password } = req.body;
 
     const existingUser = await User.findOne({ username });

@@ -23,6 +23,7 @@ router.post("/", upload.single("image"), async (req, res) => {
 
     const member = new Events({
       title: req.body.title,
+      subTitle: req.body.subTitle,
       filename: req.file.filename,
       path: req.file.path,
     });
